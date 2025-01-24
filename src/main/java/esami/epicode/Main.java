@@ -6,6 +6,7 @@ import esami.epicode.Classi.Enum.Periodicità;
 import esami.epicode.Classi.GenerazioneDati.GenerazioneDatiTabelle;
 import esami.epicode.Classi.Libro;
 import esami.epicode.Classi.Rivista;
+import esami.epicode.DAO.PrestitoDAO;
 import esami.epicode.DAO.PubblicazioneDAO;
 import esami.epicode.DAO.UtenteDAO;
 
@@ -26,11 +27,15 @@ public class Main {
     public static void main(String[] args) {
         PubblicazioneDAO pubblicazioneDAO = new PubblicazioneDAO(em);
         UtenteDAO utenteDAO = new UtenteDAO(em);
+        PrestitoDAO prestitoDAO = new PrestitoDAO(em);
+
 
         GenerazioneDatiTabelle generator = new GenerazioneDatiTabelle();
-        generator.generateBooks(pubblicazioneDAO, faker); //ho usato un for loop e faker per generare in automatico e più velocemente i libri
+        generator.generateBooks(pubblicazioneDAO, faker); //ho usato un for loop e faker per generare in automatico e più velocemente Punnlicazioni e Utenti.
         generator.generateRiviste(pubblicazioneDAO, faker);//la logica è da ricercare nella classe GenerazioneDatiTabelle.
         generator.generateUtenti(utenteDAO, faker);
+
+
     }
 
 
