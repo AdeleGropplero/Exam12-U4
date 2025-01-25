@@ -25,7 +25,7 @@ public class GenerazioneDatiTabelle {
                     faker.options().option(Genere.values()),
                     faker.code().isbn10(),
                     faker.book().title(),
-                    faker.number().numberBetween(1700, 2025),
+                    faker.number().numberBetween(1900, 2025),
                     faker.number().numberBetween(120, 900)
             );
             pubblicazioneDAO.save(libro);

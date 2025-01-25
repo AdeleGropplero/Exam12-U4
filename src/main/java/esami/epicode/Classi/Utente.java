@@ -13,7 +13,7 @@ public class Utente {
     private long nTessera;
     private String nome;
     private String cognome;
-    @Column(name = "u_data_di_nascita")
+    @Column(name = "data_di_nascita")
     private LocalDate dataDiNascita;
 
     @OneToMany(mappedBy = "utente")

@@ -1,8 +1,13 @@
 package esami.epicode.DAO;
 
 import esami.epicode.Classi.Prestito;
+import esami.epicode.Classi.Pubblicazione;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
+import java.util.List;
 
 public class PrestitoDAO {
     private EntityManager em;
@@ -26,4 +31,12 @@ public class PrestitoDAO {
         em.remove(e);
         em.getTransaction().commit();
     }
+
+    public void update(Prestito prestito) {
+        em.getTransaction().begin();
+        em.merge(prestito);
+        em.getTransaction().commit();
+    }
+
+
 }

@@ -5,26 +5,29 @@ import java.time.LocalDate;
 
 
 @Entity
+@Table(name = "prestiti",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"id_pubblicazione", "restituzione_effettiva"}))
+
 public class Prestito {
     @Id
     @GeneratedValue
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_utente") // Nome corretto della colonna FK
+    @JoinColumn(name = "id_utente", nullable = false)
     private Utente utente;
 
     @ManyToOne
-    @JoinColumn(name = "id_pubblicazione") // Nome corretto della colonna FK
+    @JoinColumn(name = "id_pubblicazione", nullable = false)
     private Pubblicazione pubblicazione;
 
-    @Column(name = "inizio_prestito")
+    @Column(name = "inizio_prestito", nullable = false)
     private LocalDate inizioPrestito;
 
-    @Column(name = "restituzione_prevista")
+    @Column(name = "restituzione_prevista", nullable = false)
     private LocalDate restituzionePrevista;
 
-    @Column(name = "restituzione_effettiva")
+    @Column(name = "restituzione_effettiva", nullable = true)
     private LocalDate restituzioneEffettiva;
 
     public Prestito() {

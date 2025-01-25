@@ -7,9 +7,12 @@ import java.util.List;
 @Table(name = "pubblicazioni")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_pubblicazione", discriminatorType = DiscriminatorType.STRING)
+@NamedQuery(name = "findByIsbnQuery", query = "SELECT p FROM Pubblicazione p WHERE p.isbn = :isbn")
 
 public abstract class Pubblicazione {
     @Id
+    @GeneratedValue
+    protected long id;
     protected String isbn;
     protected String titolo;
     protected int anno;
