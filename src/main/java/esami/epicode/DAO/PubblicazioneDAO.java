@@ -61,4 +61,34 @@ public class PubblicazioneDAO {
         }
         return risultati;
     }
+
+    public List<Pubblicazione> findByAutore(String autore) {
+
+        Query q = em.createQuery("SELECT p FROM Pubblicazione p WHERE p.autore = :autore"); //Dynamic query//
+        q.setParameter("autore", autore);
+        List<Pubblicazione> risultati = q.getResultList();
+        if (risultati.isEmpty()) {
+            throw new PubblicazioneNonDisponibileException(
+                    "Ci dispiace! Non abbiamo pubblicazioni in catalogo per l'autore " + autore
+            );
+        }
+        return risultati;
+    }
+
+    public List<Pubblicazione> findByTitoloLike(String titolo) {
+        Query q = em.createQuery("SELECT p FROM Pubblicazione p WHERE LOWER(p.titolo) LIKE LOWER(:titolo)"); // Dynamic query con LIKE
+        q.setParameter("titolo", "%" + titolo.toLowerCase() + "%"); // Aggiungo i "%" per cercare stringhe che contengono 'titolo'
+        //ho reso la ricerca case insensitive.
+        List<Pubblicazione> risultati = q.getResultList();
+
+        if (risultati.isEmpty()) {
+            throw new PubblicazioneNonDisponibileException(
+                    "Ci dispiace! Non abbiamo pubblicazioni in catalogo che contengono '" + titolo + "' nel titolo."
+            );
+        }
+        return risultati;
+    }
+
+
+
 }

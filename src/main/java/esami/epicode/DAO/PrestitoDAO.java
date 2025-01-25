@@ -2,6 +2,8 @@ package esami.epicode.DAO;
 
 import esami.epicode.Classi.Prestito;
 import esami.epicode.Classi.Pubblicazione;
+import esami.epicode.Exceptions.PrestitPerTesseraException;
+import esami.epicode.Exceptions.PubblicazioneNonDisponibileException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -38,5 +40,15 @@ public class PrestitoDAO {
         em.getTransaction().commit();
     }
 
-
+    public List<Prestito> findByNTessera(long nTessera) {
+        Query q = em.createQuery("SELECT p FROM Prestito p WHERE p.utente.nTessera = :nTessera"); //Dynamic query//
+        q.setParameter("nTessera", nTessera);
+        List<Prestito> risultati = q.getResultList();
+        if (risultati.isEmpty()) {
+            throw new PrestitPerTesseraException(
+                    "Non abbiamo prestiti attivi per la Tessera " + nTessera
+            );
+        }
+        return risultati;
+    }
 }
