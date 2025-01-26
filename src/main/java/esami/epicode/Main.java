@@ -2,19 +2,17 @@ package esami.epicode;
 
 import com.github.javafaker.Faker;
 import esami.epicode.Classi.Enum.Genere;
-import esami.epicode.Classi.Enum.Periodicità;
 import esami.epicode.Classi.GenerazioneDati.GenerazioneDatiTabelle;
 import esami.epicode.Classi.Libro;
 import esami.epicode.Classi.Prestito;
 import esami.epicode.Classi.Pubblicazione;
-import esami.epicode.Classi.Rivista;
 import esami.epicode.DAO.PrestitoDAO;
 import esami.epicode.DAO.PubblicazioneDAO;
 import esami.epicode.DAO.UtenteDAO;
+import esami.epicode.Exceptions.NessunPrestitoScadutoException;
 import esami.epicode.Exceptions.PrestitPerTesseraException;
 import esami.epicode.Exceptions.PubblicazioneNonDisponibileException;
 import org.hibernate.exception.ConstraintViolationException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -22,7 +20,6 @@ import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 
 public class Main {
@@ -48,6 +45,7 @@ public class Main {
               più velocemente Pubblicazioni e Utenti.
               La logica è da ricercare nella classe GenerazioneDatiTabelle,
               all'interno del package GenerazioneDati.
+              Scommentare per generare i dati.
               */
 
         // generator.generateBooks(pubblicazioneDAO, faker);
@@ -86,6 +84,10 @@ public class Main {
         //prestitoDAO.update(p4);
         Prestito p5 = new Prestito(utenteDAO.getByID(24), pubblicazioneDAO.getByID(19), LocalDate.of(2025, 2, 16));
         prestitoDAO.save(p5);
+        Prestito p7 = new Prestito(utenteDAO.getByID(24), pubblicazioneDAO.getByID(21), LocalDate.of(2023, 7, 29));
+        //prestitoDAO.save(p7);
+        Prestito p8 = new Prestito(utenteDAO.getByID(23), pubblicazioneDAO.getByID(18), LocalDate.of(2021, 5, 30));
+        //prestitoDAO.save(p8);
 
 
 
@@ -123,7 +125,7 @@ public class Main {
             // Gestione di altre eccezioni generali
             System.out.println("Errore imprevisto: " + e.getMessage());
         }
-        System.out.println("---------------------------------------------------");
+        System.out.println("-----------FINE ES.2----------------------------------------");
 
         /*----------------------------------------------------------------------------------------*/
 
@@ -135,7 +137,7 @@ public class Main {
              */
         pubblicazioneDAO.findByIsbnQuery("8849726242"); //Qui se non trova l'id restituisce
         // un messaggio in console.
-        System.out.println("---------------------------------------------------");
+        System.out.println("------------------FINE ES.3---------------------------------");
         /*----------------------------------------------------------------------------------------*/
 
         /*🟢--------ES.4-------------ricerca per ISBN-------------------------------------------🟢*/
@@ -147,7 +149,7 @@ public class Main {
         } catch (PubblicazioneNonDisponibileException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("---------------------------------------------------");
+        System.out.println("------------------FINE ES.4---------------------------------");
         /*----------------------------------------------------------------------------------------*/
 
         /*🟢--------ES.5-------------ricerca per autore------------------------------------------🟢*/
@@ -159,10 +161,10 @@ public class Main {
         } catch (PubblicazioneNonDisponibileException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("---------------------------------------------------");
+        System.out.println("--------------------FINE ES.5-------------------------------");
         /*----------------------------------------------------------------------------------------*/
 
-        /*🟢--------ES.5----------ricerca per Titolo o parte di esso-----------------------------🟢*/
+        /*🟢--------ES.6----------ricerca per Titolo o parte di esso-----------------------------🟢*/
         try {
             List<Pubblicazione> pubblicazioniPerTitolo = pubblicazioneDAO.findByTitoloLike("ring");
             //Cambiare il valore per effettuare ricerche diverse.
@@ -171,10 +173,10 @@ public class Main {
         } catch (PubblicazioneNonDisponibileException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("---------------------------------------------------");
+        System.out.println("-----------------FINE ES.6----------------------------------");
         /*----------------------------------------------------------------------------------------*/
 
-        /*🟢--------ES.6----------ricerca Prestiti attivi per Tessera-----------------------------🟢*/
+        /*🟢--------ES.7----------ricerca Prestiti attivi per Tessera-----------------------------🟢*/
         try {
             List<Prestito> prestitiAttiviPerTessera = prestitoDAO.findByNTessera(25);
             //Cambiare il valore per effettuare ricerche diverse.
@@ -183,7 +185,18 @@ public class Main {
         } catch (PrestitPerTesseraException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("---------------------------------------------------");
+        System.out.println("-----------------FINE ES.7----------------------------------");
+        /*----------------------------------------------------------------------------------------*/
+
+        /*🟢--------ES.8----------ricerca Prestiti scaduti e non restituiti-----------------------------🟢*/
+        try {
+            List<Prestito> prestitiScaduti = prestitoDAO.findAllPrestitiScaduti();
+            System.out.println("Ecco l'elenco dei prestiti scaduti e non ancora restituiti:");
+            prestitiScaduti.forEach(System.out::println);
+        } catch (NessunPrestitoScadutoException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("--------------FINE ES.8-------------------------------------");
         /*----------------------------------------------------------------------------------------*/
 
     }
